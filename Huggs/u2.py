@@ -1,54 +1,43 @@
 import os
 from huggingface_hub import login
+from smolagents import CodeAgent, DuckDuckGoSearchTool, InferenceClientModel, tool
 
-login()
+login()  # token must have WRITE access for push_to_hub
 
-from smolagents import CodeAgent, DuckDuckGoSearchTool, InferenceClientModel
+HF_TOKEN = os.getenv("HUGGINGFACE_API_KEY")  # optional; login() already cached it
 
-HF_TOKEN = os.getenv("HUGGINGFACE_API_KEY")
+@tool
+def suggest_menu(occasion: str) -> str:
+    """Suggests a menu based on the occasion.
+
+    Args:
+        occasion (str): One of "casual", "formal", "superhero", or "custom".
+    """
+    menus = {
+        "casual": "Pizza, snacks, and drinks.",
+        "formal": "3-course dinner with wine and dessert.",
+        "superhero": "Buffet with high-energy and healthy food.",
+    }
+    return menus.get(occasion, "Custom menu for the butler.")
 
 agent = CodeAgent(
-    tools=[DuckDuckGoSearchTool()],
+    tools=[DuckDuckGoSearchTool(), suggest_menu],
     model=InferenceClientModel(
         model_id="moonshotai/Kimi-K2.5",
         token=HF_TOKEN,
     ),
+    additional_authorized_imports=["datetime"],
 )
 
-# agent.run("What is the current suitation of Nepal Flood.")
+agent.run("""
+    Alfred needs to prepare for the party. Here are the tasks:
+    1. Prepare the drinks - 30 minutes
+    2. Decorate the mansion - 60 minutes
+    3. Set up the menu - 45 minutes
+    4. Prepare the music and playlist - 45 minutes
 
+    If we start right now, at what time will the party be ready?
+""")
 
-#=====================================================================================================================
-
-
-from smolagents import CodeAgent , tool, InferenceClientModel
-
-@tool 
-
-def suggest_menu(occasion : str )->str:
-    """Suggests a menu based on the occasion.
-    Args:
-        occasion (str): The type of occasion for the party. Allowed values are:
-                        - "casual": Menu for casual party.
-                        - "formal": Menu for formal party.
-                        - "superhero": Menu for superhero party.
-                        - "custom": Custom menu.
-    """
-
-    if occasion == "casual":
-            return "Pizza, snacks, and drinks."
-    elif occasion == "formal":
-            return "3-course dinner with wine and dessert."
-    elif occasion == "superhero":
-            return "Buffet with high-energy and healthy food."
-    else:
-            return "Custom menu for the butler."
-agent2 = CodeAgent(
-    tools=[DuckDuckGoSearchTool()],
-    model=InferenceClientModel(
-        model_id="moonshotai/Kimi-K2.5",
-        token=HF_TOKEN,
-    ),
-)
-
-agent2.run("Prepare a formal menu for the party")
+# Push the agent that actually has the tool and ran
+agent.push_to_hub('codewithkyros/Kyagen')

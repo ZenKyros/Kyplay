@@ -5,6 +5,10 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "ddgs>=9.16.0",
+    "gradio>=6.27.0",
+    "huggingface>=0.0.1",
+    "huggingface-hub>=1.31.0",
     "ipykernel>=7.3.0",
     "langchain>=1.4.0",
     "langchain-community>=0.4.2",
@@ -19,5 +23,8 @@ dependencies = [
     "openai>=3.11.0",
     "pypdf>=6.18.1",
     "python-dotenv>=1.2.3",
+    "pytz>=2026.3.post1",
     "reportlab>=5.0.1",
+    "smolagents>=1.26.0",
+    "transformers>=5.17.0",
 ]
