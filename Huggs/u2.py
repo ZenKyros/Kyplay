@@ -29,15 +29,10 @@ agent = CodeAgent(
     additional_authorized_imports=["datetime"],
 )
 
-agent.run("""
-    Alfred needs to prepare for the party. Here are the tasks:
-    1. Prepare the drinks - 30 minutes
-    2. Decorate the mansion - 60 minutes
-    3. Set up the menu - 45 minutes
-    4. Prepare the music and playlist - 45 minutes
-
-    If we start right now, at what time will the party be ready?
-""")
 
 # Push the agent that actually has the tool and ran
 agent.push_to_hub('codewithkyros/Kyagen')
+
+kyagen = agent.from_hub('codewithkyros/Kyagen', trust_remote_code=True)
+
+kyagen.run("Give me the best playlist for a party at Wayne's mansion. The party idea is a 'villain masquerade' theme")  
