@@ -16,6 +16,6 @@ llm = HuggingFaceInferenceAPI(
     provider="auto"
 )
 
-response = llm.complete("Hello, how are you?")
+response = llm.complete("What do you think about the quantum computing in future? ")
 print(response)
 # I am good, how can I help you today?
