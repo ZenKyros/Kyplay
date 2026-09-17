@@ -17,6 +17,3 @@ agent = agent.from_hub.from_hub(
 )
 
 
-kyagen = agent.from_hub('codewithkyros/Kyagen', trust_remote_code=True)
-
-kyagen.run("Give me the best playlist for a party at Wayne's mansion. The party idea is a 'villain masquerade' theme")  
